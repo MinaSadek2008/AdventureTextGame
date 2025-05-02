@@ -7,145 +7,178 @@ def print_pause(message, delay=1):
 
 def start_adventure(score=0):
     has_knife = False
-    player_name = input("What is your name? ")
-    
-    print_pause(f"Welcome, {player_name}!")
-    print_pause("You open your eyes.")
-    print_pause("You are on a beach.")
-    print_pause("The sea is next to you.")
-    print_pause("You don’t know how you got here.")
-    print_pause("Maybe the water brought you to this island.")
-    print_pause("You are alone.")
-    print_pause("You must find a way to leave.")
-    print_pause("\nLevel 1 – The Beach")
-    
+    player_name = input('What is your name? ')
+
+    print_pause(f'Welcome, {player_name}!')
+    print_pause('You open your eyes.')
+    print_pause('You are on a beach.')
+    print_pause('The sea is next to you.')
+    print_pause('You don\'t know how you got here.')
+    print_pause('Maybe the water brought you to this island.')
+    print_pause('You are alone.')
+    print_pause('You must find a way to leave.')
+    print_pause('\nLevel 1 – The Beach')
+
     while True:
-        choice_1 = input("You see two things:\n1. A jungle path\n2. A broken boat\nWhat do you want to do? (1 or 2): ")
+        choice_1 = input(
+            'You see two things:\n'
+            '1. A jungle path\n'
+            '2. A broken boat\n'
+            'What do you want to do? (1 or 2): '
+        )
         if choice_1 == '1':
             score += 10
+            print_pause(f'Your current score is: {score}')
             jungle(score, has_knife)
             break
         elif choice_1 == '2':
             score -= 5
-            print_pause("You try to use the boat. It breaks and sinks.")
-            print_pause("You swim back to the beach.")
-            print_pause("You haven’t found a solution.")
-            print_pause("You are forced to enter the jungle to find a solution to escape from this island.")
+            print_pause('You try to use the boat. It breaks and sinks.')
+            print_pause('You swim back to the beach.')
+            print_pause('You haven\'t found a solution.')
+            print_pause(
+                'You are forced to enter the jungle to find a solution '
+                'to escape from this island.'
+            )
+            print_pause(f'Your current score is: {score}')
             jungle(score, has_knife)
             break
         else:
-            print_pause("Invalid choice. Please choose either 1 or 2.")
+            print_pause('Invalid choice. Please choose either 1 or 2.')
 
 def jungle(score, has_knife):
-    print_pause("\nLevel 2 – The Jungle")
-    print_pause("The jungle is dark and scary.")
-    print_pause("You hear something moving in the trees!")
+    print_pause('\nLevel 2 – The Jungle')
+    print_pause('The jungle is dark and scary.')
+    print_pause('Your energy has started to decrease, but you have to keep going.')
 
-    knife = input("You find a knife on the ground. Do you want to take it? (yes / no): ")
+    knife = input('You find a knife on the ground. Do you want to take it? (yes / no): ')
     if knife.lower() == 'yes':
         score += 10
         has_knife = True
-        print_pause("You take the knife.")
+        print_pause('You take the knife.')
     elif knife.lower() == 'no':
         score -= 5
-        print_pause("You try to run, but the plants stop you.")
-        print_pause("Something scratches your leg.")
-        print_pause("Your legs are bleeding.")
+        print_pause('You try to run, but the plants stop you.')
+        print_pause('Something scratches your leg.')
+        print_pause('Your legs are bleeding.')
     else:
         print_pause("Invalid choice. Please choose 'yes' or 'no'.")
         score -= 5
         jungle(score, has_knife)
         return
 
-    score = random.choice([Tiger, Monkey, Wind])(score, has_knife)
+    print_pause(f'Your current score is: {score}')
+    score = random.choice([tiger, monkey, wind])(score, has_knife)
+    if score is None:
+        return
     temple(has_knife, score)
 
-def Monkey(score, *_):
-    print_pause("There is a monkey on the tree.")
-    print_pause("The monkey threw at you a banana!")
-    print_pause("You ate the banana, and gained some energy.")
+def monkey(score, *_):
+    print_pause('There is a monkey on the tree.')
+    print_pause('The monkey threw at you a banana!')
+    print_pause('You ate the banana, and gained some energy.')
     score += 5
+    print_pause(f'Your current score is: {score}')
     return score
 
-def Wind(score, *_):
-    print_pause("The trees are moving... What do you think is coming?")
-    wind = input("Do you think it's a monster coming to attack you? (yes / no): ")
-    if wind.lower() == "yes":
-        print_pause("Nothing happened. You scared yourself!")
+def wind(score, *_):
+    print_pause('The trees are moving... What do you think is coming?')
+    wind_input = input('Do you think it\'s a monster coming to attack you? (yes / no): ')
+    if wind_input.lower() == 'yes':
+        print_pause('Nothing happened. You scared yourself!')
         score -= 5
-    elif wind.lower() == "no":
-        print_pause("You are brave. It's just some wind.")
+    elif wind_input.lower() == 'no':
+        print_pause('You are brave. It\'s just some wind.')
+        score += 5
     else:
-        print_pause("Invalid choice. Please answer yes or no.")
-        score -= 5
+        print_pause('Invalid choice. Please answer yes or no.')
+    print_pause(f'Your current score is: {score}')
     return score
 
-def Tiger(score, has_knife):
-    print_pause("Oh no! A tiger launched at you attacking you!")
+def tiger(score, has_knife):
+    print_pause('Oh no! A tiger launched at you attacking you!')
     if has_knife:
-        print_pause("You killed the tiger. Now you are safe.")
+        print_pause('You killed the tiger. Now you are safe.')
         score += 10
+        print_pause(f'Your current score is: {score}')
     else:
-        print_pause("The tiger killed you.")
-        print_pause("Game Over.")
-        print_pause(f"Your final score is: {score}")
+        print_pause('The tiger killed you.')
+        print_pause('Game Over.')
+        print_pause(f'Your final score is: {score}')
         replay(score)
-        return score  # to avoid None if replay ends
+        return None
     return score
 
 def temple(has_knife, score):
-    print_pause("\nLevel 3 – The Temple")
-    print_pause("You see an old temple.")
-    print_pause("Inside, there is a gold statue on a stone table.")
+    print_pause('\nLevel 3 – The Temple')
+    print_pause('You see an old temple.')
+    print_pause('Inside, there is a gold statue on a stone table.')
 
     while True:
-        choice_2 = input("What do you want to do?\n1. Take the statue\n2. Leave it and go out\nWhat do you want to do? (1 or 2): ")
+        choice_2 = input(
+            'What do you want to do?\n'
+            '1. Take the statue\n'
+            '2. Leave it and go out\n'
+            'What do you want to do? (1 or 2): '
+        )
         if choice_2 == '1':
-            print_pause("You take the gold statue.")
+            print_pause('You take the gold statue.')
             score += 15
-            print_pause("Suddenly, you hear a loud sound! Rocks fall from the roof!")
-            print_pause("You run fast and escape.")
+            print_pause('Suddenly, you hear a loud sound! Rocks fall from the roof!')
+            print_pause('You run fast and escape.')
+            print_pause(f'Your current score is: {score}')
             volcano(True, score)
             break
         elif choice_2 == '2':
-            print_pause("You look at the statue... but you walk away.")
+            print_pause('You look at the statue... but you walk away.')
             score += 5
-            print_pause("You don’t find anything else.")
+            print_pause('You don\'t find anything else.')
+            print_pause(f'Your current score is: {score}')
             volcano(False, score)
             break
         else:
-            print_pause("Invalid choice. Please choose either 1 or 2.")
+            print_pause('Invalid choice. Please choose either 1 or 2.')
             score -= 5
 
 def volcano(has_statue, score):
-    print_pause("\nLevel 4 – The Volcano")
-    print_pause("You climb a big mountain.")
-    print_pause("It is a volcano.")
-    print_pause("You see a helicopter in the sky!")
+    print_pause('\nLevel 4 – The Volcano')
+    print_pause('You climb a big mountain.')
+    print_pause('It is a volcano.')
+    print_pause('You see a helicopter in the sky!')
 
     if has_statue:
-        print_pause("The sun hits the gold statue. It shines bright.")
-        print_pause("The helicopter sees it!")
-        print_pause("You are saved!")
+        print_pause('The sun hits the gold statue. It shines bright.')
+        print_pause('The helicopter sees it!')
+        print_pause('You are saved!')
         score += 20
     else:
-        print_pause("You scream and wave...")
-        print_pause("But the helicopter doesn’t see you.")
-        print_pause("It flies away.")
-        print_pause("The volcano explodes and you die.")
+        print_pause('You scream and wave...')
+        print_pause('But the helicopter doesn\'t see you.')
+        print_pause('It flies away.')
+        print_pause('The volcano explodes and you die.')
         score -= 10
 
-    print_pause(f"Your final score is: {score}")
+    print_pause(f'Your final score is: {score}')
+
+    if score >= 40:
+        print_pause('Congratulations! You successfully passed the game!')
+    else:
+        print_pause('Game Over. You did not pass the game.')
+
     replay(score)
 
 def replay(score):
     while True:
-        replay_choice = input("Do you want to play again? (yes / no): ")
+        if score >= 40:
+            replay_choice = input('Do you want to play again? (yes / no): ')
+        else:
+            replay_choice = input('Do you want to try again? (yes / no): ')
+        
         if replay_choice.lower() == 'yes':
             start_adventure()
             break
         elif replay_choice.lower() == 'no':
-            print_pause("Thanks for playing!")
+            print_pause('Thanks for playing!')
             break
         else:
             print_pause("Invalid choice. Please choose 'yes' or 'no'.")
